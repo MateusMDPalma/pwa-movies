@@ -17,7 +17,7 @@ A aplicação permite que o usuário:
 
 ---
 
-## 1.1 Motivação
+### 1.1 Motivação
 
 O projeto foi pensado para simular um **produto digital orientado a dados**, aproximando os conteúdos da disciplina de um cenário prático, em que:
 
@@ -27,12 +27,69 @@ O projeto foi pensado para simular um **produto digital orientado a dados**, apr
 
 ---
 
-## 1.2 Tecnologias principais
+### 1.2 Tecnologias principais
 
 - **Frontend:** PWA (ex.: React + Vite), HTML5, CSS3, JavaScript (ES6+)
 - **Backend:** Node.js, Express
 - **Integração externa:** OMDb API (dados de filmes)
 - **Outros:** Dotenv (variáveis de ambiente), Git/GitHub
+
+---
+
+## 2. Arquitetura e Fluxo de Dados
+
+A arquitetura do **CinePWA** é organizada em **duas camadas principais**, estruturadas em um **monorepo** com separação entre `frontend/` e `backend/`.
+
+---
+
+### 2.1 Camadas da aplicação
+
+1. **Frontend (PWA)**  
+   - Responsável pela **interface com o usuário**.  
+   - Exibe campo de busca, lista de filmes e página de detalhes.  
+   - Realiza chamadas HTTP para o backend (ex.: `GET /api/movies?search=Batman`).  
+
+2. **Backend (API Node/Express)**  
+   - Atua como intermediário entre o frontend e a **OMDb API**.  
+   - Recebe as requisições do frontend, consulta a OMDb e devolve os dados tratados.  
+   - Protege a **chave de API** usando variáveis de ambiente (`.env`).
+
+---
+
+### 2.2 Estrutura em monorepo
+
+A organização do repositório segue a seguinte estrutura geral:
+
+```bash
+.
+├── backend/        # API Node/Express (integração com OMDb)
+│   ├── src/
+│   └── package.json
+├── frontend/       # Aplicação PWA (interface do usuário)
+│   ├── src/
+│   └── package.json
+└── README.md
+```
+
+Essa separação facilita o desenvolvimento, permitindo que frontend e backend evoluam de forma independente, mantendo tudo em um único projeto.
+
+---
+
+### 2.3 Fluxo de requisições
+
+O fluxo básico de dados funciona assim:
+
+```text
+Usuário → Frontend (PWA) → Backend (Node/Express) → OMDb API
+                                          ↓
+                               Resposta tratada → Frontend → Tela do usuário
+```
+
+1. O usuário digita o nome de um filme na interface.  
+2. O frontend envia uma requisição para o backend com o termo de busca.  
+3. O backend consulta a **OMDb API** usando a `OMDB_API_KEY`.  
+4. Os dados retornados são filtrados/organizados e enviados de volta ao frontend.  
+5. O frontend exibe os resultados e os detalhes do filme para o usuário.
 
 ---
 
@@ -50,6 +107,94 @@ Esta seção explica como preparar o ambiente e rodar o **CinePWA** localmente.
 
 ---
 
+### 3.2 Clonar ou extrair o projeto
+
+Se estiver usando Git:
+
+```bash
+git clone https://github.com/SEU-USUARIO/SEU-REPO.git
+cd SEU-REPO
+```
+
+Se recebeu um `.zip`:
+
+1. Extraia o `.zip`.
+2. Abra o terminal na pasta raiz do projeto.
+
+A estrutura esperada:
+
+```bash
+.
+├── backend/
+├── frontend/
+└── README.md
+```
+
+---
+
+### 3.3 Configuração do backend
+
+No diretório `backend/`:
+
+```bash
+cd backend
+npm install
+```
+
+Crie um arquivo `.env` com:
+
+```env
+OMDB_API_KEY=SUA_CHAVE_AQUI
+PORT=3001
+```
+
+Inicie o servidor:
+
+```bash
+npm run dev
+# ou
+npm start
+```
+
+O backend ficará acessível em:
+
+```text
+http://localhost:3001
+```
+
+---
+
+### 3.4 Configuração do frontend
+
+Em outro terminal, no diretório `frontend/`:
+
+```bash
+cd frontend
+npm install
+```
+
+Se o frontend usa variável de ambiente para a API, crie um `.env` com algo como:
+
+```env
+VITE_API_BASE_URL=http://localhost:3001
+# ou REACT_APP_API_BASE_URL=http://localhost:3001
+```
+
+Inicie o frontend:
+
+```bash
+npm run dev
+```
+
+O app ficará disponível em:
+
+```text
+http://localhost:5173
+```
+
+Com **frontend** e **backend** rodando, a aplicação já pode ser utilizada para pesquisar e visualizar filmes.
+
+---
 
 ## 4. Funcionalidades e Possíveis Extensões
 
@@ -125,4 +270,3 @@ Algumas extensões que podem evoluir o projeto:
 ---
 
 Este README resume a visão geral, arquitetura, configuração e funcionalidades do **CinePWA**, conectando o desenvolvimento técnico à proposta da disciplina **Data Applied to Business**.
-
