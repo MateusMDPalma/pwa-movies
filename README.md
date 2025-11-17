@@ -112,8 +112,8 @@ Esta seção explica como preparar o ambiente e rodar o **CinePWA** localmente.
 Se estiver usando Git:
 
 ```bash
-git clone https://github.com/SEU-USUARIO/SEU-REPO.git
-cd SEU-REPO
+git clone https://github.com/MateusMDPalma/pwa-movies.git
+cd pwa-movies
 ```
 
 Se recebeu um `.zip`:
