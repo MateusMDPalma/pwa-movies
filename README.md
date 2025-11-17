@@ -35,39 +35,7 @@ O projeto foi pensado para simular um **produto digital orientado a dados**, apr
 - **Outros:** Dotenv (variáveis de ambiente), Git/GitHub
 
 ---
-## 2. Arquitetura e Fluxo de Dados
 
-A arquitetura do **CinePWA** é organizada em **duas camadas principais**, estruturadas em um **monorepo** com separação entre `frontend/` e `backend/`.
-
----
-
-### 2.1 Camadas da aplicação
-
-1. **Frontend (PWA)**  
-   - Responsável pela **interface com o usuário**.  
-   - Exibe campo de busca, lista de filmes e página de detalhes.  
-   - Realiza chamadas HTTP para o backend (ex.: `GET /api/movies?search=Batman`).  
-
-2. **Backend (API Node/Express)**  
-   - Atua como intermediário entre o frontend e a **OMDb API**.  
-   - Recebe as requisições do frontend, consulta a OMDb e devolve os dados tratados.  
-   - Protege a **chave de API** usando variáveis de ambiente (`.env`).
-
----
-
-### 2.2 Estrutura em monorepo
-
-A organização do repositório segue a seguinte estrutura geral:
-
-```bash
-.
-├── backend/        # API Node/Express (integração com OMDb)
-│   ├── src/
-│   └── package.json
-├── frontend/       # Aplicação PWA (interface do usuário)
-│   ├── src/
-│   └── package.json
-└── README.md
 ## 3. Configuração e Execução do Projeto
 
 Esta seção explica como preparar o ambiente e rodar o **CinePWA** localmente.
@@ -82,13 +50,7 @@ Esta seção explica como preparar o ambiente e rodar o **CinePWA** localmente.
 
 ---
 
-### 3.2 Clonar ou extrair o projeto
 
-Se estiver usando Git:
-
-```bash
-git clone https://github.com/SEU-USUARIO/SEU-REPO.git
-cd SEU-REPO
 ## 4. Funcionalidades e Possíveis Extensões
 
 ---
