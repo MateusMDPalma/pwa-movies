@@ -1,20 +1,25 @@
-const { test, expect } = require('@playwright/test')
+const { test, expect } = require('@playwright/test');
 
 test('PWA carrega e busca filmes na API', async ({ page }) => {
-  // abre o PWA
-  await page.goto('/', { waitUntil: 'networkidle' })
+  // abre a home
+  await page.goto('/');
 
-  // confere que o título da aba contém PWA Movies
-  await expect(page).toHaveTitle(/PWA Movies/i)
+  // ✅ confere que o título visual "PWA Movies" está na tela
+  await expect(
+    page.getByRole('heading', { name: /PWA Movies/i })
+  ).toBeVisible();
 
   // seleciona campo de busca e botão
-  const input = page.getByPlaceholder('Digite o nome do filme (ex: Batman)')
-  const button = page.getByRole('button', { name: /Buscar/i })
+  const input = page.getByPlaceholder('Digite o nome do filme (ex: Batman)');
+  await input.fill('batman');
 
-  await input.fill('batman')
-  await button.click()
+  const button = page.getByRole('button', { name: /Buscar/i });
+  await button.click();
 
-  // espera aparecer pelo menos 1 card em [data-testid="api-ok"]
-  const firstCard = page.locator('[data-testid="api-ok"] article').first()
-  await expect(firstCard).toBeVisible()
-})
+  // espera carregar resultados
+  await page.waitForTimeout(2000);
+
+  const cards = page.locator('[data-testid="movie-card"]');
+  // pelo menos 1 card visível
+  await expect(cards.first()).toBeVisible();
+});
