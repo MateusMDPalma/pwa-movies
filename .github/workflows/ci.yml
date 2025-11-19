@@ -19,41 +19,43 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Instalar dependências (monorepo)
-        run: npm ci 
-    
-      - name: Instalar Docker Compose plugin
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose-plugin
+      # Instala dependências do monorepo (raiz)
+      - name: Instalar dependências
+        run: npm ci
 
+      # (Opcional) testes unitários se você criar no futuro
       - name: Testes unitários (web/api) - se existirem
         run: |
           npm test --workspace cinepwa-web --if-present
           npm test --workspace movies-api --if-present
 
+      # Garante que o build da versão web funciona
       - name: Build da aplicação web
         run: npm run build:web
 
-      - name: Subir containers com Docker Compose
+      # Sobe API + Web em modo dev (usando scripts que você já tem)
+      - name: Iniciar API + Web em background
         run: |
-          docker compose up -d --build
+          npm run dev &
+          sleep 5
+
+      # Espera o frontend responder em http://localhost:5173
+      - name: Aguardar servidor web ficar pronto
+        run: |
           n=0
-          until curl -sSf http://localhost:8080 > /dev/null || [ $n -ge 30 ]; do
+          until curl -sSf http://localhost:5173 > /dev/null || [ $n -ge 30 ]; do
             n=$((n+1))
-            echo "Aguardando web subir... tentativas: $n"
+            echo "Esperando web subir... tentativa $n"
             sleep 2
           done
 
+      # Roda testes E2E do Playwright apontando para a porta 5173
       - name: Testes E2E com Playwright
         env:
-          E2E_BASE_URL: http://localhost:8080
+          E2E_BASE_URL: http://localhost:5173
         run: npm run test:e2e
 
-      - name: Derrubar containers
-        if: always()
-        run: docker compose down
-
+      # Salva o relatório do Playwright como artefato do CI
       - name: Upload do relatório de testes E2E
         if: always()
         uses: actions/upload-artifact@v4
