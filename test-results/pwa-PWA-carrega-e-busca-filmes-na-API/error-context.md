@@ -1,0 +1,62 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - heading "PWA Movies 🎬" [level=1] [ref=e5]
+    - paragraph [ref=e6]: Busque filmes usando a API OMDb via nossa API Node/Express.
+  - generic [ref=e7]:
+    - 'textbox "Digite o nome do filme (ex: Batman)" [ref=e8]': batman
+    - button "Buscar" [active] [ref=e9] [cursor=pointer]
+  - generic [ref=e10]:
+    - article [ref=e11]:
+      - img "Batman Begins" [ref=e12]
+      - generic [ref=e13]:
+        - heading "Batman Begins" [level=2] [ref=e14]
+        - paragraph [ref=e15]: 2005 • movie
+    - article [ref=e16]:
+      - img "The Batman" [ref=e17]
+      - generic [ref=e18]:
+        - heading "The Batman" [level=2] [ref=e19]
+        - paragraph [ref=e20]: 2022 • movie
+    - article [ref=e21]:
+      - 'img "Batman v Superman: Dawn of Justice" [ref=e22]'
+      - generic [ref=e23]:
+        - 'heading "Batman v Superman: Dawn of Justice" [level=2] [ref=e24]'
+        - paragraph [ref=e25]: 2016 • movie
+    - article [ref=e26]:
+      - 'img "Batman v Superman: Dawn of Justice" [ref=e27]'
+      - generic [ref=e28]:
+        - 'heading "Batman v Superman: Dawn of Justice" [level=2] [ref=e29]'
+        - paragraph [ref=e30]: 2016 • movie
+    - article [ref=e31]:
+      - img "Batman" [ref=e32]
+      - generic [ref=e33]:
+        - heading "Batman" [level=2] [ref=e34]
+        - paragraph [ref=e35]: 1989 • movie
+    - article [ref=e36]:
+      - img "Batman Returns" [ref=e37]
+      - generic [ref=e38]:
+        - heading "Batman Returns" [level=2] [ref=e39]
+        - paragraph [ref=e40]: 1992 • movie
+    - article [ref=e41]:
+      - img "Batman & Robin" [ref=e42]
+      - generic [ref=e43]:
+        - heading "Batman & Robin" [level=2] [ref=e44]
+        - paragraph [ref=e45]: 1997 • movie
+    - article [ref=e46]:
+      - img "Batman Forever" [ref=e47]
+      - generic [ref=e48]:
+        - heading "Batman Forever" [level=2] [ref=e49]
+        - paragraph [ref=e50]: 1995 • movie
+    - article [ref=e51]:
+      - img "The Lego Batman Movie" [ref=e52]
+      - generic [ref=e53]:
+        - heading "The Lego Batman Movie" [level=2] [ref=e54]
+        - paragraph [ref=e55]: 2017 • movie
+    - article [ref=e56]:
+      - 'img "Batman: The Animated Series" [ref=e57]'
+      - generic [ref=e58]:
+        - 'heading "Batman: The Animated Series" [level=2] [ref=e59]'
+        - paragraph [ref=e60]: 1992–1995 • series
+```

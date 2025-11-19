@@ -1,60 +1,55 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+const express = require('express')
+const cors = require('cors')
 
-// gambiarra pra usar node-fetch v3 com require()
-const fetch = (...args) =>
-  import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const app = express()
+const PORT = process.env.PORT || 3001
+const OMDB_API_KEY = process.env.OMDB_API_KEY
 
-const app = express();
+app.use(cors())
+app.use(express.json())
 
-const PORT = process.env.PORT || 3001;
-const OMDB_API_KEY = process.env.OMDB_API_KEY;
+// Rota de healthcheck (pra testar se a API está ok)
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true, message: 'API de filmes rodando 🚀' })
+})
 
-app.use(cors());
+// Rota de busca de filmes
+app.get('/api/movies', async (req, res) => {
+  const search = req.query.search
 
-// rota de teste
-app.get('/', (req, res) => {
-  res.json({ ok: true, message: 'API de filmes está rodando 🚀' });
-});
+  if (!search) {
+    return res.status(400).json({ error: 'Parâmetro "search" é obrigatório' })
+  }
 
-// buscar filmes por título (lista)
-app.get('/api/search', async (req, res) => {
-  const { q } = req.query;
-
-  if (!q) {
-    return res.status(400).json({ error: 'Parâmetro q (título) é obrigatório.' });
+  if (!OMDB_API_KEY) {
+    return res.status(500).json({ error: 'OMDB_API_KEY não configurada' })
   }
 
   try {
     const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${encodeURIComponent(
-      q
-    )}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    res.json(data);
+      search
+    )}`
+
+    const response = await fetch(url)
+    const data = await response.json()
+
+    if (data.Response === 'False') {
+      return res.status(404).json({ error: data.Error || 'Nenhum filme encontrado' })
+    }
+
+    // devolve só a lista de filmes
+    return res.json({
+      search,
+      total: data.Search?.length || 0,
+      movies: data.Search,
+    })
   } catch (err) {
-    console.error('Erro ao buscar filmes na OMDb:', err);
-    res.status(500).json({ error: 'Erro ao consultar OMDb.' });
+    console.error('Erro ao buscar filmes na OMDb:', err)
+    return res.status(500).json({ error: 'Erro interno ao buscar filmes' })
   }
-});
+})
 
-// detalhes de um filme por ID (IMDb ID)
-app.get('/api/movie/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${id}&plot=full`;
-    const response = await fetch(url);
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    console.error('Erro ao buscar detalhes do filme:', err);
-    res.status(500).json({ error: 'Erro ao consultar detalhes do filme.' });
-  }
-});
-
+// Sobe o servidor
 app.listen(PORT, () => {
-  console.log(`✅ API ouvindo em http://localhost:${PORT}`);
-});
-
+  console.log(`API de filmes ouvindo em http://localhost:${PORT}`)
+})

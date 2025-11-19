@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  api:
+    build: ./apps/api
+    ports:
+      - "3001:3001"
+    container_name: movies-api
+    env_file:
+      - ./apps/api/.env
+    environment:
+      - NODE_ENV=production
+
+  web:
+    build: ./apps/web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    container_name: movies-web
+    environment:
+      - VITE_API_URL=http://localhost:3001
