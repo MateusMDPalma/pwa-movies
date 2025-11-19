@@ -11,9 +11,11 @@
     "dev:web": "npm run dev --workspace cinepwa-web",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
     "build:web": "npm run build --workspace cinepwa-web",
-    "start:api": "npm run start --workspace movies-api"
+    "start:api": "npm start --workspace movies-api",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "concurrently": "^9.0.0"
   }
 }
