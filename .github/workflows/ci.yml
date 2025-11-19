@@ -48,6 +48,9 @@ jobs:
             echo "Esperando web subir... tentativa $n"
             sleep 2
           done
+    
+      - name: Instalar browsers do Playwright
+        run: npx playwright install --with-deps
 
       # Roda testes E2E do Playwright apontando para a porta 5173
       - name: Testes E2E com Playwright
