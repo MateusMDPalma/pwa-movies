@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependências (monorepo)
+        run: npm ci
+
+      - name: Testes unitários (web/api) - se existirem
+        run: |
+          npm test --workspace cinepwa-web --if-present
+          npm test --workspace movies-api --if-present
+
+      - name: Build da aplicação web
+        run: npm run build:web
+
+      - name: Subir containers com Docker Compose
+        run: |
+          docker compose up -d --build
+          n=0
+          until curl -sSf http://localhost:8080 > /dev/null || [ $n -ge 30 ]; do
+            n=$((n+1))
+            echo "Aguardando web subir... tentativas: $n"
+            sleep 2
+          done
+
+      - name: Testes E2E com Playwright
+        env:
+          E2E_BASE_URL: http://localhost:8080
+        run: npm run test:e2e
+
+      - name: Derrubar containers
+        if: always()
+        run: docker compose down
+
+      - name: Upload do relatório de testes E2E
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: test-results/
+          if-no-files-found: ignore
